@@ -63,8 +63,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+            //listView에 들어가는 과제들을 arraylist로 담았음.
             final ArrayList<String> tasks = new ArrayList<String>();
-            tasks.add("Quiz");
+            tasks.add("Quiz2");
             tasks.add("컴구 HW6");
             tasks.add("수학과문명 독후감");
 
@@ -72,26 +73,27 @@ public class MainActivity extends AppCompatActivity {
             ListView listView = (ListView) findViewById(R.id.listView);
             listView.setAdapter(adapter);
 
+            //과제 클릭 시 과제 string값을 detailActivity로 보냄
             listView.setOnItemClickListener(
-                    new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                            String item = String.valueOf(parent.getItemAtPosition(position));
-//                            Toast.makeText(MainActivity.this, item, Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-                            intent.putExtra("TitleTask",tasks.get(position).toString());
-                            startActivity(intent);
-                        }
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                        intent.putExtra("TitleTask",tasks.get(position).toString());
+
+                        startActivity(intent);
                     }
+                }
             );
 
+            //과제 길게 클릭 시 과제 지워준다.
             listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
                 {
                     tasks.remove(position);
                     ((BaseAdapter)adapter).notifyDataSetChanged();
-                    return true;
+                    return false;
                 }
             });
 
@@ -106,9 +108,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         switch (id) {
