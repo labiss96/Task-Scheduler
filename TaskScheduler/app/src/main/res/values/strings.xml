@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">Task Scheduler</string>
-    <string name="add_task">Add Task</string>
-    <string name="completed_task">Completed task</string>
-    <string name="Average">Average</string>
-    <string name="drawer_header_text">Task Scheduler</string>
+    <string name="app_name">TaskScheduler</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Task Scheduler</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 </resources>

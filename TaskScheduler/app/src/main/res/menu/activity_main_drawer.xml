@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/main_task"
+            android:title="과제 리스트" />
+        <item
+            android:id="@+id/add_task"
+            android:title="과제 추가" />
+        <item
+            android:id="@+id/complete_task"
+            android:title="완료된 과제" />
+        <item
+            android:id="@+id/average"
+            android:title="평균 과제 완료일" />
+        <item
+            android:id="@+id/info"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="앱 정보" />
+    </group>
+
+</menu>
