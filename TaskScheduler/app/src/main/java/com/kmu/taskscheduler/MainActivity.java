@@ -9,6 +9,7 @@ import android.os.Bundle;
 //import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,6 +25,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,7 +34,11 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private DBHelper mydb;
-    SQLiteDatabase sqliteDB ;
+    SQLiteDatabase sqliteDB;
+    ArrayList<String> tasks = new ArrayList<String>();
+    String title_value, contents_value, category_value;
+    ListAdapter adapter;
+
 
     private SQLiteDatabase init_database(){
         SQLiteDatabase db = null ;
@@ -61,16 +67,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //어플 우측 하단 동그란 버튼
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -88,14 +84,9 @@ public class MainActivity extends AppCompatActivity
         SQLiteDatabase sqdb = mydb.getReadableDatabase();
         Cursor cs = sqdb.rawQuery(DBHelper.SQL_SELECT,null);
 
-        Intent intent = getIntent();
-        String title = intent.getExtras().getString("title");
-        String contents = intent.getExtras().getString("contents");
-        String category = intent.getExtras().getString("category");
-
 
         //listView에 들어가는 과제들을 arraylist로 담았음.
-        final ArrayList<String> tasks = new ArrayList<String>();
+
         tasks.add("Quiz2");
         tasks.add("컴구 HW6");
         tasks.add("수학과문명 독후감");
@@ -105,7 +96,7 @@ public class MainActivity extends AppCompatActivity
             tasks.add(no);
         }
 
-        final ListAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, tasks);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, tasks);
         ListView listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapter);
 
@@ -134,8 +125,41 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-
     }
+
+    private void add(int n,int task , String fd,String sd,String cont,String title,int dday){
+        SQLiteDatabase sqdb = mydb.getWritableDatabase();
+        sqdb.execSQL(DBHelper.SQL_DELETE);
+
+        String sqlInsert = DBHelper.SQL_INSERT + " ("+n+", "+
+                task + ", " + "'" +
+                fd +"'," + "'"+
+                sd + "', " +"'"+
+                cont + "'," + "'"+
+                title + "', "+ dday +")";
+        sqdb.execSQL(sqlInsert);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK){
+            switch (requestCode){
+                case 3000: {
+                    title_value = data.getStringExtra("title");
+                    contents_value = data.getStringExtra("contents");
+                    category_value = data.getStringExtra("category");
+                    tasks.add(title_value);
+                    ((BaseAdapter)adapter).notifyDataSetChanged();
+
+                    Toast.makeText(getApplicationContext(), title_value + contents_value + category_value, Toast.LENGTH_LONG).show();
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+    }
+
 
     private void save_value(){
         SQLiteDatabase sqdb = mydb.getReadableDatabase();
@@ -205,7 +229,7 @@ public class MainActivity extends AppCompatActivity
             //fragment = new AddTaskFragment();
         } else if (id == R.id.add_task) {
             Intent addTaskIntent = new Intent(this, AddTaskActivity.class);
-            startActivity(addTaskIntent);
+            startActivityForResult(addTaskIntent, 3000);
         } else if (id == R.id.complete_task) {
 //            Intent detailIntent = new Intent(this, DetailActivity.class);
 //            startActivity(detailIntent);
