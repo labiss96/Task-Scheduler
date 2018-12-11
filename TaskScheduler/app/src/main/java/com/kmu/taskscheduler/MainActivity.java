@@ -88,6 +88,11 @@ public class MainActivity extends AppCompatActivity
         SQLiteDatabase sqdb = mydb.getReadableDatabase();
         Cursor cs = sqdb.rawQuery(DBHelper.SQL_SELECT,null);
 
+        Intent intent = getIntent();
+        String title = intent.getExtras().getString("title");
+        String contents = intent.getExtras().getString("contents");
+        String category = intent.getExtras().getString("category");
+
 
         //listView에 들어가는 과제들을 arraylist로 담았음.
         final ArrayList<String> tasks = new ArrayList<String>();

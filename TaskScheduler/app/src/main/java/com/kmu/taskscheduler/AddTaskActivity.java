@@ -46,6 +46,9 @@ public class AddTaskActivity extends AppCompatActivity {
                 category = spinner.getSelectedItem().toString();
 
                 Intent intent = new Intent(AddTaskActivity.this, MainActivity.class);
+                intent.putExtra("title",title);
+                intent.putExtra("contents",contents);
+                intent.putExtra("category",category);
                 startActivity(intent);
 
             }
