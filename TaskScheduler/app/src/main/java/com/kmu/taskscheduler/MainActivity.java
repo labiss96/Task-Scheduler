@@ -140,10 +140,10 @@ public class MainActivity extends AppCompatActivity
         String sd = "20193278";
         String cont = "test";
         String title = "testTitle";
-
+        String task = "quiz";
         String sqlInsert = DBHelper.SQL_INSERT + " (" +
                 1 + ", " +
-                1 + ", " + "'" +
+                task + ", " + "'" +
                 fd + "', " + "'" +
                 sd + "', " + "'" +
                 cont + "', " + "'" +

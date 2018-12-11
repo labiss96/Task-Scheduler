@@ -29,7 +29,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String CONTENT = "contet";
 
     public static final String SQL_CREAT_TB = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME +
-            " " + "(" + NUM + " INTEGER NOT NULL" + ", " + TASK +" INTEGER"+", "+
+            " " + "(" + NUM + " INTEGER NOT NULL" + ", " + TASK +" TEXT"+", "+
             FINALDATE + " TEXT" + ", " + TITLE + " TEXT" + ", " +
             STARTDATE + " TEXT" + ", " + CONTENT + " TEXT" + ", " +
             DDAY + " INTEGER" + ")";
