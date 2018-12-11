@@ -1,11 +1,16 @@
 package com.kmu.taskscheduler;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 public class AddTaskActivity extends AppCompatActivity {
@@ -23,6 +28,31 @@ public class AddTaskActivity extends AppCompatActivity {
         spinner = (Spinner)findViewById(R.id.category);
         spinner.setAdapter(adapter);
 
+
+        final Spinner spinner = (Spinner)findViewById(R.id.category);
+        final TextInputEditText titleText = (TextInputEditText) findViewById(R.id.title);
+        final TextInputEditText contentText = (TextInputEditText) findViewById(R.id.contents);
+
+
+        Button addTaskButton = (Button) findViewById(R.id.addTask) ;
+        addTaskButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO : click event
+                String title, contents,category;
+
+                title = titleText.getText().toString();
+                contents = contentText.getText().toString();
+                category = spinner.getSelectedItem().toString();
+
+                Intent intent = new Intent(AddTaskActivity.this, MainActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
     }
+
+
 
 }
