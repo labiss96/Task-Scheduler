@@ -1,6 +1,9 @@
 package com.kmu.taskscheduler;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 //import android.support.design.widget.FloatingActionButton;
 //import android.support.design.widget.Snackbar;
@@ -20,11 +23,36 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private DBHelper mydb;
+    SQLiteDatabase sqliteDB ;
+
+    private SQLiteDatabase init_database(){
+        SQLiteDatabase db = null ;
+
+        //File file = getDatabasePath("contact.db") ;
+        File file = new File(getFilesDir(), "task_db.db") ;
+        System.out.println("PATH : " + file.toString()) ;
+        try {
+            db = SQLiteDatabase.openOrCreateDatabase(file, null) ;
+        } catch (SQLiteException e) {
+            e.printStackTrace() ;
+        } if (db == null) {
+            System.out.println("DB creation failed. " + file.getAbsolutePath()) ;
+        }
+        return db;
+    }
+
+    private void init_tables(){
+        mydb = new DBHelper(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +80,25 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+        sqliteDB = init_database();
+        init_tables();
+        save_value();
+
+        SQLiteDatabase sqdb = mydb.getReadableDatabase();
+        Cursor cs = sqdb.rawQuery(DBHelper.SQL_SELECT,null);
+
+
         //listView에 들어가는 과제들을 arraylist로 담았음.
         final ArrayList<String> tasks = new ArrayList<String>();
         tasks.add("Quiz2");
         tasks.add("컴구 HW6");
         tasks.add("수학과문명 독후감");
+
+        if(cs.moveToFirst()) {
+            String no = cs.getString(5);
+            tasks.add(no);
+        }
 
         final ListAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, tasks);
         ListView listView = (ListView) findViewById(R.id.listView);
@@ -87,9 +129,29 @@ public class MainActivity extends AppCompatActivity
         });
 
 
+
     }
 
+    private void save_value(){
+        SQLiteDatabase sqdb = mydb.getReadableDatabase();
+        sqdb.execSQL(DBHelper.SQL_DELETE);
 
+        String fd = "20151515";
+        String sd = "20193278";
+        String cont = "test";
+        String title = "testTitle";
+
+        String sqlInsert = DBHelper.SQL_INSERT + " (" +
+                1 + ", " +
+                1 + ", " + "'" +
+                fd + "', " + "'" +
+                sd + "', " + "'" +
+                cont + "', " + "'" +
+                title + "', " +
+                1 + ")" ;
+        sqdb.execSQL(sqlInsert) ;
+
+    }
 
     @Override
     public void onBackPressed() {
