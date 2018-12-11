@@ -141,9 +141,10 @@ public class MainActivity extends AppCompatActivity
         String cont = "test";
         String title = "testTitle";
         String task = "quiz";
+
         String sqlInsert = DBHelper.SQL_INSERT + " (" +
                 1 + ", " +
-                task + ", " + "'" +
+                1 + ", " + "'" +
                 fd + "', " + "'" +
                 sd + "', " + "'" +
                 cont + "', " + "'" +
