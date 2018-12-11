@@ -143,12 +143,16 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK){
+            SQLiteDatabase sqdb = mydb.getReadableDatabase();
+            Cursor cs = sqdb.rawQuery(DBHelper.SQL_SELECT,null);
             switch (requestCode){
                 case 3000: {
                     title_value = data.getStringExtra("title");
                     contents_value = data.getStringExtra("contents");
                     category_value = data.getStringExtra("category");
-                    tasks.add(title_value);
+                    add(4,2,"20180909","201982091",contents_value,title_value,4);
+                    if(cs.moveToLast())
+                        tasks.add(cs.getString(5));
                     ((BaseAdapter)adapter).notifyDataSetChanged();
 
                     Toast.makeText(getApplicationContext(), title_value + contents_value + category_value, Toast.LENGTH_LONG).show();
