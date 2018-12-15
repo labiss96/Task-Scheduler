@@ -51,6 +51,16 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String AVERAGE = "averageDay";
     public static final String CUSTOM = "customDay";
 
+    public static final String SQL_CREATE_TB2 = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_2 +" " + "(" +
+            NUM_2 + " INTEGER NOT NULL" + ", " + USERSELECT + "INTEGER , " +
+            AVERAGE + "INTEGER ,"+CUSTOM + "INTEGER )";
+    public static final String SQL_SELECT_2 = "SELECT * FROM " + TABLE_NAME_2;
+
+    public static final String SQL_DELETE_2 = "DELETE FROM " + TABLE_NAME_2;
+
+    public static final String SQL_INSERT_2 = "INSERT OR REPLACE INTO " + TABLE_NAME_2 + " "+ "("+
+            NUM_2 +", " +USERSELECT+", "+AVERAGE+", "+CUSTOM+") VALUES ";
+
     public DBHelper(Context context){
         super(context,DBFILE,null,DBVERSION);
     }
@@ -58,6 +68,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db){
         db.execSQL(DBHelper.SQL_CREAT_TB);
+        db.execSQL(DBHelper.SQL_CREATE_TB2);
     }
     public void onUpgrade(SQLiteDatabase db,int oldv , int newv){
         onCreate(db);

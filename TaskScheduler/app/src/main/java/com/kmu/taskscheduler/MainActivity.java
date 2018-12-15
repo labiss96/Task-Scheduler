@@ -126,7 +126,13 @@ public class MainActivity extends AppCompatActivity
 
 
     }
-
+    private void getValue(int k){
+        SQLiteDatabase sqdb = mydb.getReadableDatabase();
+        Cursor cs = sqdb.rawQuery(DBHelper.SQL_SELECT,null);
+        if(cs.move(k)){
+            // get value of table (need index or keyvalue
+        }
+    }
     private void add(int n,int task , String fd,String sd,String cont,String title,int dday){
         SQLiteDatabase sqdb = mydb.getWritableDatabase();
         sqdb.execSQL(DBHelper.SQL_DELETE);
