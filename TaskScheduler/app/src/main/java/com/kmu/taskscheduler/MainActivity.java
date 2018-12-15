@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity
     SQLiteDatabase sqliteDB;
     ArrayList<String> tasks = new ArrayList<String>();
     String title_value, contents_value, category_value;
+    int year_value, month_value, day_value;
     ListAdapter adapter;
 
 
@@ -156,12 +157,16 @@ public class MainActivity extends AppCompatActivity
                     title_value = data.getStringExtra("title");
                     contents_value = data.getStringExtra("contents");
                     category_value = data.getStringExtra("category");
+                    year_value = data.getIntExtra("year", 1);
+                    month_value = data.getIntExtra("month", 1);
+                    day_value = data.getIntExtra("day", 1);
+
                     add(4,2,"20180909","201982091",contents_value,title_value,4);
                     if(cs.moveToLast())
                         tasks.add(cs.getString(5));
                     ((BaseAdapter)adapter).notifyDataSetChanged();
 
-                    Toast.makeText(getApplicationContext(), title_value + contents_value + category_value, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), title_value + year_value +"년"+ month_value +"월"+ day_value + "일", Toast.LENGTH_LONG).show();
                     break;
                 }
                 default:
