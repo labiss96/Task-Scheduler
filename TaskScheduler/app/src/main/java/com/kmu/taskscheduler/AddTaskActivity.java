@@ -1,6 +1,5 @@
 package com.kmu.taskscheduler;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -50,7 +49,6 @@ public class AddTaskActivity extends AppCompatActivity {
         addTaskButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO : click event
                 String title, contents,category;
 
                 title = titleText.getText().toString();
