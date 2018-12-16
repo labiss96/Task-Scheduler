@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity
 
 
     }
+
     private void getValue(int k){
         SQLiteDatabase sqdb = mydb.getReadableDatabase();
         Cursor cs = sqdb.rawQuery(DBHelper.SQL_SELECT,null);
@@ -252,8 +253,8 @@ public class MainActivity extends AppCompatActivity
             Intent addTaskIntent = new Intent(this, AddTaskActivity.class);
             startActivityForResult(addTaskIntent, 3000);
         } else if (id == R.id.complete_task) {
-//            Intent detailIntent = new Intent(this, DetailActivity.class);
-//            startActivity(detailIntent);
+            Intent completedIntent = new Intent(this, CompletedTaskActivity.class);
+            startActivity(completedIntent);
         } else if (id == R.id.average) {
 
         } else if (id == R.id.info) {
