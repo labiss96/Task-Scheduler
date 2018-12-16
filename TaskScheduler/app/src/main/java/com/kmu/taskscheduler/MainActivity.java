@@ -28,6 +28,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
@@ -40,7 +41,8 @@ public class MainActivity extends AppCompatActivity
     int year_value, month_value, day_value;
     ListAdapter adapter;
 
-    String detail_title, detail_contents, detail_category;
+    String detail_title, detail_contents, detail_category, detail_finalDay;
+    int detail_dday;
 
     private SQLiteDatabase init_database(){
         SQLiteDatabase db = null ;
@@ -131,7 +133,6 @@ public class MainActivity extends AppCompatActivity
 
 
     }
-
     private void getValue(int k){
         SQLiteDatabase sqdb = mydb.getReadableDatabase();
         Cursor cs = sqdb.rawQuery(DBHelper.SQL_SELECT,null);
@@ -139,6 +140,8 @@ public class MainActivity extends AppCompatActivity
             detail_category = cs.getString(1);
             detail_contents = cs.getString(4);
             detail_title = cs.getString(5);
+            detail_finalDay = cs.getString(2);
+            detail_dday = cs.getInt(6);
             // get value of table (need index or keyvalue)
         }
     }
