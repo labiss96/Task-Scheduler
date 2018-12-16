@@ -26,7 +26,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -79,7 +81,6 @@ public class MainActivity extends AppCompatActivity
 
         sqliteDB = init_database();
         init_tables();
-        save_value();
 
         SQLiteDatabase sqdb = mydb.getReadableDatabase();
         Cursor cs = sqdb.rawQuery(DBHelper.SQL_SELECT,null);
@@ -168,7 +169,11 @@ public class MainActivity extends AppCompatActivity
                     month_value = data.getIntExtra("month", 1);
                     day_value = data.getIntExtra("day", 1);
 
-                    add(4,2,"20180909","201982091",contents_value,title_value,4);
+                    String fd = String.valueOf(year_value) + String.valueOf(month_value)+String.valueOf(day_value);
+
+                    Date n = new Date();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                    add(0,taskChange(category_value),fd,sdf.format(n),contents_value,title_value,year_value *month_value*30 +day_value);
                     if(cs.moveToLast())
                         tasks.add(cs.getString(5));
                     ((BaseAdapter)adapter).notifyDataSetChanged();
@@ -182,27 +187,53 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
-    private void save_value(){
-        SQLiteDatabase sqdb = mydb.getReadableDatabase();
-        sqdb.execSQL(DBHelper.SQL_DELETE);
-
-        String fd = "20151515";
-        String sd = "20193278";
-        String cont = "test";
-        String title = "testTitle";
-        String task = "quiz";
-
-        String sqlInsert = DBHelper.SQL_INSERT + " (" +
-                1 + ", " +
-                1 + ", " + "'" +
-                fd + "', " + "'" +
-                sd + "', " + "'" +
-                cont + "', " + "'" +
-                title + "', " +
-                1 + ")" ;
-        sqdb.execSQL(sqlInsert) ;
-
+    private int taskChange(String t) {
+        int r = 0;
+        switch (t) {
+            case "레포트":
+                r= 1;
+                break;
+            case "독후감":
+                r= 2;
+                break;
+            case "코딩":
+                r= 3;
+                break;
+            case "Quiz":
+                r= 4;
+                break;
+            case "라이브 코딩테스트":
+                r= 5;
+                break;
+            case "중간/기말고사":
+                r= 6;
+                break;
+        }
+        return r;
+    }
+    private String taskChangeToString(int t){
+        String r = null;
+        switch (t){
+            case 1:
+                r="레포트";
+                break;
+            case 2:
+                r = "독후감";
+                break;
+            case 3:
+                r = "코딩";
+                break;
+            case 4:
+                r = "Quiz";
+                break;
+            case 5:
+                r = "라이브 코딩테스트";
+                break;
+            case 6:
+                r = "중간/기말고사";
+                break;
+        }
+        return r;
     }
 
     @Override
