@@ -63,7 +63,11 @@ public class MainActivity extends AppCompatActivity
     private void init_tables(){
         mydb = new DBHelper(this);
     }
-
+    @Override
+    protected  void onDestroy(){
+        sqliteDB.close();
+        super.onDestroy();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,11 +87,11 @@ public class MainActivity extends AppCompatActivity
 
         sqliteDB = init_database();
         init_tables();
-
+        sqliteDB.execSQL(mydb.SQL_CREAT_TB);
+        sqliteDB.execSQL(mydb.SQL_CREATE_TB2);
         SQLiteDatabase sqdb = mydb.getReadableDatabase();
         Cursor cs = sqdb.rawQuery(DBHelper.SQL_SELECT,null);
-
-
+        Cursor cs2 = sqliteDB.rawQuery(DBHelper.SQL_SELECT,null);
         //listView에 들어가는 과제들을 arraylist로 담았음.
 
 //        tasks.add("Quiz2");
@@ -95,6 +99,10 @@ public class MainActivity extends AppCompatActivity
 //        tasks.add("수학과문명 독후감");
 
         if(cs.moveToFirst()) {
+            String no = cs.getString(5);
+            tasks.add(no);
+        }
+        if(cs2.moveToFirst()) {
             String no = cs.getString(5);
             tasks.add(no);
         }
@@ -156,6 +164,7 @@ public class MainActivity extends AppCompatActivity
                 cont + "'," + "'"+
                 title + "', "+ dday +")"; //1,
         sqdb.execSQL(sqlInsert);
+        sqliteDB.execSQL(sqlInsert);
     }
 
     @Override
