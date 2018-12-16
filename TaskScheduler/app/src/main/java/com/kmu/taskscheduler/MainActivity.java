@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity
     int year_value, month_value, day_value;
     ListAdapter adapter;
 
+    String detail_title, detail_contents, detail_category;
 
     private SQLiteDatabase init_database(){
         SQLiteDatabase db = null ;
@@ -86,9 +87,9 @@ public class MainActivity extends AppCompatActivity
 
         //listView에 들어가는 과제들을 arraylist로 담았음.
 
-        tasks.add("Quiz2");
-        tasks.add("컴구 HW6");
-        tasks.add("수학과문명 독후감");
+//        tasks.add("Quiz2");
+//        tasks.add("컴구 HW6");
+//        tasks.add("수학과문명 독후감");
 
         if(cs.moveToFirst()) {
             String no = cs.getString(5);
@@ -99,13 +100,17 @@ public class MainActivity extends AppCompatActivity
         ListView listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapter);
 
-        //과제 클릭 시 과제 string값을 detailActivity로 보냄
+        //과제 클릭 시 데이터베이스에 저장된 해당 과제의 값들을 detailActivity로 보냄
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-                        intent.putExtra("TitleTask",tasks.get(position).toString());
+
+                        getValue(position);
+                        intent.putExtra("title",detail_title);
+                        intent.putExtra("contents",detail_contents);
+                        intent.putExtra("category",detail_category);
 
                         startActivity(intent);
                     }
@@ -129,7 +134,10 @@ public class MainActivity extends AppCompatActivity
         SQLiteDatabase sqdb = mydb.getReadableDatabase();
         Cursor cs = sqdb.rawQuery(DBHelper.SQL_SELECT,null);
         if(cs.move(k)){
-            // get value of table (need index or keyvalue
+            detail_category = cs.getString(1);
+            detail_contents = cs.getString(4);
+            detail_title = cs.getString(5);
+            // get value of table (need index or keyvalue)
         }
     }
     private void add(int n,int task , String fd,String sd,String cont,String title,int dday){
@@ -141,7 +149,7 @@ public class MainActivity extends AppCompatActivity
                 fd +"'," + "'"+
                 sd + "', " +"'"+
                 cont + "'," + "'"+
-                title + "', "+ dday +")";
+                title + "', "+ dday +")"; //1,
         sqdb.execSQL(sqlInsert);
     }
 
