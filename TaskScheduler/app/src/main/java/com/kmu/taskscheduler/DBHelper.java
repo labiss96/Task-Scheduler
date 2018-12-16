@@ -36,6 +36,8 @@ public class DBHelper extends SQLiteOpenHelper {
             STARTDATE + " TEXT" + ", " + CONTENT + " TEXT" + ", " +
             DDAY + " INTEGER" + ")";
 
+    public static final String SQL_UPDATE_NUM = "UPDATE "+TABLE_NAME+" SET "+NUM+"=1 WHERE "+TITLE+"=";
+
     public static final String SQL_DROP_TBL = "DROP TABLE IF EXISTS " + TABLE_NAME ;
 
     public static final String SQL_SELECT = "SELECT * FROM " + TABLE_NAME ;

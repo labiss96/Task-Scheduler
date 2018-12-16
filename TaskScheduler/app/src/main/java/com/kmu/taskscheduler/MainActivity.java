@@ -134,12 +134,17 @@ public class MainActivity extends AppCompatActivity
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
             {
                 tasks.remove(position);
+                // sqliteDB.execSQL(mydb.SQL_DELETE + " WHERE title="+title);
+                // 길게눌렀을때 타이틀값을 얻어야 합니다.
                 ((BaseAdapter)adapter).notifyDataSetChanged();
                 return false;
             }
         });
 
 
+    }
+    private void updateNumber(String title){
+        sqliteDB.execSQL(mydb.SQL_UPDATE_NUM+title);
     }
     private void getValue(int k){
         SQLiteDatabase sqdb = mydb.getReadableDatabase();
