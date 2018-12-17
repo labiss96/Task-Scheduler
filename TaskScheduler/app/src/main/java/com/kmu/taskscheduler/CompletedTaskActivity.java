@@ -25,5 +25,6 @@ public class CompletedTaskActivity extends AppCompatActivity {
         //이제 리스트뷰에 DB에 저장된 완료된 과제를 넣어주면 되는데.. oncreate 될때만 슥 넣어주면 되겠지?
 
 
+
     }
 }

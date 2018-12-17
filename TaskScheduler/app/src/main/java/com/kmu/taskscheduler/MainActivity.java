@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity
         SQLiteDatabase sqdb = mydb.getReadableDatabase();
         Cursor cs = sqdb.rawQuery(DBHelper.SQL_SELECT,null);
         if(cs.move(k)){
-            detail_category = cs.getString(1);
+            detail_category = taskChangeToString(cs.getInt(1));
             detail_contents = cs.getString(4);
             detail_title = cs.getString(5);
             detail_finalDay = cs.getString(2);

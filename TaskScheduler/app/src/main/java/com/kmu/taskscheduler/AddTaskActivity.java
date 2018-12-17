@@ -8,11 +8,13 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -24,6 +26,7 @@ public class AddTaskActivity extends AppCompatActivity {
     private Button taskPickDate;
 
     private int taskYear, taskMonth, taskDay;
+    static String category = "";
 
     static final int DATE_DIALOG_ID = 0;
 
@@ -34,13 +37,25 @@ public class AddTaskActivity extends AppCompatActivity {
 
 
         //spinner 과제 카테고리 창 구현
+
+
         final String[] list = getResources().getStringArray(R.array.category_list);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, list);
         spinner = (Spinner)findViewById(R.id.category);
         spinner.setAdapter(adapter);
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)  {
+                Toast.makeText(AddTaskActivity.this, ""+spinner.getItemAtPosition(position), Toast.LENGTH_LONG).show();
+                category = spinner.getItemAtPosition(position).toString();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
 
-        final Spinner spinner = (Spinner)findViewById(R.id.category);
+        });
+
+
         final TextInputEditText titleText = (TextInputEditText) findViewById(R.id.title);
         final TextInputEditText contentText = (TextInputEditText) findViewById(R.id.contents);
 
@@ -49,11 +64,11 @@ public class AddTaskActivity extends AppCompatActivity {
         addTaskButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String title, contents,category;
+                String title, contents;
 
                 title = titleText.getText().toString();
                 contents = contentText.getText().toString();
-                category = spinner.getSelectedItem().toString();
+//                category = spinner.getSelectedItem().toString();
 
 
                 Intent intent = new Intent(AddTaskActivity.this, MainActivity.class);
@@ -67,10 +82,10 @@ public class AddTaskActivity extends AppCompatActivity {
 
 
                 setResult(RESULT_OK, intent);
-                finish();
+        finish();
 
-            }
-        });
+    }
+});
 
 
         taskDate = (TextView)findViewById(R.id.dateView);
