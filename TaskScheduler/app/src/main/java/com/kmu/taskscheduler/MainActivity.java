@@ -126,6 +126,8 @@ public class MainActivity extends AppCompatActivity
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
             {
 
+
+                tasks[position]
                 String title = listView.getAdapter().getItem(position).toString();
                 Toast.makeText(getApplicationContext(), title, Toast.LENGTH_LONG).show();
                 //sqliteDB.execSQL(mydb.SQL_DELETE + " WHERE title="+"'"+title+"'");
@@ -340,6 +342,8 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
             }
+            completedIntent.putExtra("completedTasks",arr);
+
             startActivity(completedIntent);
         } else if (id == R.id.average) {
 
