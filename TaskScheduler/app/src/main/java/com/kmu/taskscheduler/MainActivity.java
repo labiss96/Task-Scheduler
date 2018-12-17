@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity
     private DBHelper mydb;
     SQLiteDatabase sqliteDB;
     ArrayList<String> tasks = new ArrayList<String>();
+    ArrayList<Integer> tasksId = new ArrayList<Integer>();
     String title_value, contents_value, category_value;
     int year_value, month_value, day_value;
     ListAdapter adapter;
@@ -91,10 +92,12 @@ public class MainActivity extends AppCompatActivity
         sqliteDB.execSQL(mydb.SQL_CREATE_TB2);
         Cursor cs2 = sqliteDB.rawQuery(DBHelper.SQL_SELECT,null);
         if(0==cs2.getCount()){
-            add(0,1,"","","","",0);
+            add(0,0,1,"","","","",0);
         }
         while(cs2.moveToNext()) {
             String no = cs2.getString(5);
+            int i = cs2.getInt(0);
+            tasksId.add(i);
             tasks.add(no);
         }
 
@@ -126,12 +129,13 @@ public class MainActivity extends AppCompatActivity
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
             {
 
-
+                int i = 0;
                 String title = listView.getAdapter().getItem(position).toString();
                 Toast.makeText(getApplicationContext(), title, Toast.LENGTH_LONG).show();
                 //sqliteDB.execSQL(mydb.SQL_DELETE + " WHERE title="+"'"+title+"'");
                 // 그냥 테스트 코드---------------sqliteDB.execSQL("DELETE FROM mydb WHERE title = '" + title + "';");
                 // 길게눌렀을때 타이틀값을 얻어야 합니다.
+                sqliteDB.delete(mydb.TABLE_NAME,mydb.ID+"=?",new String[]{String.valueOf(i)});
                 tasks.remove(position);
                 ((BaseAdapter)adapter).notifyDataSetChanged();
                 return false;
@@ -141,8 +145,8 @@ public class MainActivity extends AppCompatActivity
 
     } //end onCreate
 
-    private void updateNumber(String title){
-        sqliteDB.execSQL(mydb.SQL_UPDATE_NUM+"'"+title+"'");
+    private void updateNumber(int id){
+        sqliteDB.execSQL(mydb.SQL_UPDATE_NUM+id);
     }
     private void getValue(int k){
         Cursor cs = sqliteDB.rawQuery(DBHelper.SQL_SELECT,null);
@@ -155,11 +159,11 @@ public class MainActivity extends AppCompatActivity
             // get value of table (need index or keyvalue)
         }
     }
-    private void add(int n,int task , String fd,String sd,String cont,String title,int dday){
+    private void add(int id,int n,int task , String fd,String sd,String cont,String title,int dday){
         SQLiteDatabase sqdb = mydb.getWritableDatabase();
         sqdb.execSQL(DBHelper.SQL_DELETE);
 
-        String sqlInsert = DBHelper.SQL_INSERT + " ("+n+", "+
+        String sqlInsert = DBHelper.SQL_INSERT + " ("+id+", "+n+", "+
                 task + ", " + "'" +
                 fd +"'," + "'"+
                 sd + "', " +"'"+
@@ -173,7 +177,7 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK){
             SQLiteDatabase sqdb = mydb.getReadableDatabase();
-            Cursor cs = sqdb.rawQuery(DBHelper.SQL_SELECT,null);
+            Cursor cs = sqliteDB.rawQuery(DBHelper.SQL_SELECT,null);
             switch (requestCode){
                 case 3000: { // AddTaskActivity
                     title_value = data.getStringExtra("title");
@@ -187,7 +191,8 @@ public class MainActivity extends AppCompatActivity
 
                     Date n = new Date();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-                    add(0,taskChange(category_value),fd,sdf.format(n),contents_value,title_value,year_value *month_value*30 +day_value);
+                    cs.moveToLast();
+                    add(cs.getInt(0)+1,0,taskChange(category_value),fd,sdf.format(n),contents_value,title_value,year_value *month_value*30 +day_value);
                     if(cs.moveToLast())
                         tasks.add(cs.getString(5));
                     ((BaseAdapter)adapter).notifyDataSetChanged();
@@ -213,7 +218,7 @@ public class MainActivity extends AppCompatActivity
                             ((BaseAdapter)adapter).notifyDataSetChanged();
                             Toast.makeText(getApplicationContext(), completeTitle, Toast.LENGTH_LONG).show();
                             //DB에서 넘버링 바꿔서 완료코드로 전환
-                            updateNumber(completeTitle);
+                            //updateNumber(completeTitle);
                             break;
                         }
                         case 2: { //과제삭제
@@ -335,7 +340,7 @@ public class MainActivity extends AppCompatActivity
             int i = 0 ;
 
                 while(cs.moveToNext()){
-                    int c2 = cs.getInt(0);
+                    int c2 = cs.getInt(1);
                     if(c2 == 1){
                         arr[i] = cs.getString(5);
                         i++;

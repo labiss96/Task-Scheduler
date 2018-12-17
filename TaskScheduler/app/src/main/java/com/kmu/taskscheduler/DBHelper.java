@@ -21,6 +21,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final int DBVERSION = 1;
     public static final String DBFILE = "task_db.db";
 
+    public static final String ID = "ID";
     public static final String TABLE_NAME = "VISIBLE_DATA";
     public static final String NUM = "number";
     public static final String TASK = "task";
@@ -31,12 +32,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String CONTENT = "contet";
 
     public static final String SQL_CREAT_TB = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME +
-            " " + "(" + NUM + " INTEGER NOT NULL" + ", " + TASK +" INTEGER"+", "+
+            " " + "("+ ID+" INTERGER NOT NULL, "+ NUM + " INTEGER NOT NULL" + ", " + TASK +" INTEGER"+", "+
             FINALDATE + " TEXT" + ", " + TITLE + " TEXT" + ", " +
             STARTDATE + " TEXT" + ", " + CONTENT + " TEXT" + ", " +
             DDAY + " INTEGER" + ")";
 
-    public static final String SQL_UPDATE_NUM = "UPDATE "+TABLE_NAME+" SET "+NUM+"=1 WHERE "+TITLE+"=";
+    public static final String SQL_UPDATE_NUM = "UPDATE "+TABLE_NAME+" SET "+NUM+"=1 WHERE "+ID+"=";
 
     public static final String SQL_DROP_TBL = "DROP TABLE IF EXISTS " + TABLE_NAME ;
 
@@ -44,7 +45,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String SQL_DELETE = "DELETE FROM " + TABLE_NAME ;
 
-    public static final String SQL_INSERT = "INSERT OR REPLACE INTO " + TABLE_NAME + " " + "(" +
+    public static final String SQL_INSERT = "INSERT OR REPLACE INTO " + TABLE_NAME + " " + "(" + ID + ", " +
             NUM + ", " + TASK + ", " + FINALDATE + ", " + TITLE +", "+ STARTDATE +", "+CONTENT+", "+ DDAY+ ") VALUES " ;
 
     public static final String TABLE_NAME_2 = "UNVISIBLE_DATA";
