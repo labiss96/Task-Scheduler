@@ -30,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity
     ArrayList<String> tasks = new ArrayList<String>();
     ArrayList<Integer> tasksId = new ArrayList<Integer>();
     String title_value, contents_value, category_value;
-    int year_value, month_value, day_value;
+    int year_value, month_value, day_value, averageDate_value;
     ListAdapter adapter;
 
     String detail_title, detail_contents, detail_category, detail_finalDay;
@@ -69,6 +70,20 @@ public class MainActivity extends AppCompatActivity
         sqliteDB.close();
         super.onDestroy();
     }*/
+
+    private ArrayList<String> arrCopy(){
+        ArrayList<String> arr = new ArrayList<String>();
+        Iterator<String> itr = tasks.iterator();
+        String c;
+        while (itr.hasNext()){
+            c = itr.next();
+            if(c !=null){
+                arr.add(c);
+            }
+        }
+        return arr;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,6 +135,8 @@ public class MainActivity extends AppCompatActivity
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
                         Intent detailIntent = new Intent(MainActivity.this, DetailActivity.class);
 
                         getValue(position);
@@ -130,6 +147,9 @@ public class MainActivity extends AppCompatActivity
                         detailIntent.putExtra("taskID", detail_id);
                         detailIntent.putExtra("finalDay", detail_finalDay);
                         detailIntent.putExtra("dday",detail_dday);
+                        detailIntent.putExtra("averageDate", averageDate_value);
+
+
 
                         startActivityForResult(detailIntent, 3001);
                     }
@@ -173,7 +193,12 @@ public class MainActivity extends AppCompatActivity
             detail_finalDay = cs.getString(3);
             detail_dday = cs.getInt(7);
             detail_id = cs.getInt(0);
-
+            Cursor cs2 = sqliteDB.rawQuery(DBHelper.SQL_SELECT_2,null);
+            while(cs2.moveToNext()) {
+                if(cs.getInt(2) == cs2.getInt(0)){
+                averageDate_value = cs2.getInt(1);
+                break;}
+            }
             // get value of table (need index or keyvalue)
         }
     }
@@ -244,10 +269,32 @@ public class MainActivity extends AppCompatActivity
                     switch (buttonType){
                         case 1: { //과제완료
                             tasks.remove(completePosition);
+
+                            tasks = arrCopy();
+
                             ((BaseAdapter)adapter).notifyDataSetChanged();
                             Toast.makeText(getApplicationContext(), completeTitle, Toast.LENGTH_LONG).show();
                             //DB에서 넘버링 바꿔서 완료코드로 전환
                             updateNumber(completedTask_id);
+
+                            Cursor cs3 = sqliteDB.rawQuery(mydb.SQL_SELECT,null);
+                            Cursor cs4 = sqliteDB.rawQuery(mydb.SQL_SELECT_2,null);
+                            int a = 0;
+                            int b = 0;
+                            Calendar cal3 = Calendar.getInstance();
+
+                            while(cs3.moveToNext()){
+                                if(cs3.getInt(0)==completedTask_id){
+                                    while(cs4.moveToNext()){
+                                        if(cs4.getInt(0) == cs3.getInt(2))
+                                            b = cs4.getInt(1);
+                                    }
+                                    a = (int)(b+(cal3.get(Calendar.DATE)-cs3.getInt(7)))/2;
+                                    String up = mydb.SQL_UPDATA_2+mydb.AVERAGE+"="+a+" WHERE number="+cs3.getInt(2);
+                                    sqliteDB.execSQL(up);
+                                }
+                            }
+
                             break;
                         }
                         case 2: { //과제삭제

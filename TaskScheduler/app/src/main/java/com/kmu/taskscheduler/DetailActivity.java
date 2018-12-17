@@ -7,13 +7,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class DetailActivity extends AppCompatActivity {
 
     String tit, cnt, cat, finDay;
-    int position, id, dday;
+    int position, id, dday, averageDate;
 
 
 
@@ -28,6 +30,7 @@ public class DetailActivity extends AppCompatActivity {
         TextView category = (TextView) findViewById(R.id.category);
         TextView finalDay = (TextView) findViewById(R.id.finalDay);
         TextView d_day = (TextView) findViewById(R.id.D_Day);
+        TextView average = (TextView) findViewById(R.id.average);
 
         Button deleteButton = (Button) findViewById(R.id.delete);
         Button completedButton = (Button) findViewById(R.id.complete);
@@ -40,7 +43,8 @@ public class DetailActivity extends AppCompatActivity {
         position = intent.getIntExtra("position",0);
         id = intent.getIntExtra("taskID", 0);
         finDay = intent.getStringExtra("finalDay");
-        dday = intent.getIntExtra("dday", dday);
+        dday = intent.getIntExtra("dday", 0);
+        averageDate = intent.getIntExtra("averageDate", 0);
 
         String[] finalDayYMD = finDay.split("/");
         int year = Integer.valueOf(finalDayYMD[0]);
@@ -53,12 +57,12 @@ public class DetailActivity extends AppCompatActivity {
         int fd = c.get(Calendar.DATE);
         int d = fd - cc.get(Calendar.DATE);
 
-
         title.setText(tit);
         contents.setText(cnt);
         category.setText(cat);
         finalDay.setText(finDay);
         d_day.setText("D - "+String.valueOf(d));
+        average.setText("당신의 평균 과제 수행일은 " + averageDate + " 입니다.");
 
         completedButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,23 +93,5 @@ public class DetailActivity extends AppCompatActivity {
         });
 
 
-    }
-
-    @Override
-    protected void onStart()   {
-        super.onStart();
-
-//        TextView title = (TextView) findViewById(R.id.title);
-//        TextView contents = (TextView) findViewById(R.id.contents);
-//        TextView category = (TextView) findViewById(R.id.category);
-//
-//        Intent intent = getIntent();
-//        tit = intent.getStringExtra("title");
-//        cnt = intent.getStringExtra("contents");
-//        cat = intent.getStringExtra("category");
-//
-//        title.setText(tit);
-//        contents.setText(cnt);
-//        category.setText(cat);
     }
 }
