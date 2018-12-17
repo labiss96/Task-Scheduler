@@ -63,11 +63,11 @@ public class MainActivity extends AppCompatActivity
     private void init_tables(){
         mydb = new DBHelper(this);
     }
-    @Override
+    /*@Override
     protected  void onDestroy(){
         sqliteDB.close();
         super.onDestroy();
-    }
+    }*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,19 +89,12 @@ public class MainActivity extends AppCompatActivity
         init_tables();
         sqliteDB.execSQL(mydb.SQL_CREAT_TB);
         sqliteDB.execSQL(mydb.SQL_CREATE_TB2);
-        SQLiteDatabase sqdb = mydb.getReadableDatabase();
-        Cursor cs = sqdb.rawQuery(DBHelper.SQL_SELECT,null);
         Cursor cs2 = sqliteDB.rawQuery(DBHelper.SQL_SELECT,null);
-
-//        tasks.add("Quiz2");
-
-
-        if(cs.moveToFirst()) {
-            String no = cs.getString(5);
-            tasks.add(no);
+        if(0==cs2.getCount()){
+            add(0,1,"","","","",0);
         }
-        if(cs2.moveToFirst()) {
-            String no = cs.getString(5);
+        while(cs2.moveToNext()) {
+            String no = cs2.getString(5);
             tasks.add(no);
         }
 
@@ -134,8 +127,8 @@ public class MainActivity extends AppCompatActivity
             {
 
                 String title = listView.getAdapter().getItem(position).toString();
-//                Toast.makeText(getApplicationContext(), title, Toast.LENGTH_LONG).show();
-                //sqliteDB.execSQL(mydb.SQL_DELETE + " WHERE title="+title);
+                Toast.makeText(getApplicationContext(), title, Toast.LENGTH_LONG).show();
+                //sqliteDB.execSQL(mydb.SQL_DELETE + " WHERE title="+"'"+title+"'");
                 // 그냥 테스트 코드---------------sqliteDB.execSQL("DELETE FROM mydb WHERE title = '" + title + "';");
                 // 길게눌렀을때 타이틀값을 얻어야 합니다.
                 tasks.remove(position);
