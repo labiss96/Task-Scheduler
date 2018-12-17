@@ -96,10 +96,11 @@ public class MainActivity extends AppCompatActivity
 
         }
         while(cs2.moveToNext()) {
+            if(cs2.getInt(1)==0){
             String no = cs2.getString(4);
             int i = cs2.getInt(0);
             tasksId.add(i);
-            tasks.add(no);
+            tasks.add(no);}
         }
         Cursor cs = sqliteDB.rawQuery(DBHelper.SQL_SELECT_2,null);
         if(cs.getCount()==0){
