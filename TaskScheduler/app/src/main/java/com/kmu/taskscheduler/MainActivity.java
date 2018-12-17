@@ -216,6 +216,7 @@ public class MainActivity extends AppCompatActivity
                     else if(completedTitle != "")   {
                         tasks.remove(completedPosition);
                         ((BaseAdapter)adapter).notifyDataSetChanged();
+                        updateNumber(completedTitle);
                         //DB에서 넘버링 바꿔서 완료코드로 전환
                     }
                 }
@@ -312,7 +313,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        Cursor cs = sqliteDB.rawQuery(mydb.SQL_SELECT,null);
         Fragment fragment = null;
 
         //네비게이션바에 메뉴 클릭 시 기능.
@@ -323,6 +324,22 @@ public class MainActivity extends AppCompatActivity
             startActivityForResult(addTaskIntent, 3000);
         } else if (id == R.id.complete_task) {
             Intent completedIntent = new Intent(this, CompletedTaskActivity.class);
+            String[] arr = new String[100];
+            int i = 0 ;
+            if(cs.moveToFirst()){
+                int c = cs.getInt(0);
+                if(c == 1){
+                    arr[i] = cs.getString(5);
+                    i++;
+                }
+                while(cs.moveToNext()){
+                    int c2 = cs.getInt(0);
+                    if(c2 == 1){
+                        arr[i] = cs.getString(5);
+                        i++;
+                    }
+                }
+            }
             startActivity(completedIntent);
         } else if (id == R.id.average) {
 
