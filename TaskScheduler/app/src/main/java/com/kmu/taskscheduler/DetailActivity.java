@@ -10,7 +10,7 @@ import android.widget.TextView;
 public class DetailActivity extends AppCompatActivity {
 
     String tit, cnt, cat;
-    int position;
+    int position, id;
 
 
 
@@ -32,7 +32,9 @@ public class DetailActivity extends AppCompatActivity {
         tit = intent.getStringExtra("title");
         cnt = intent.getStringExtra("contents");
         cat = intent.getStringExtra("category");
-        position = intent.getIntExtra("position",1);
+        position = intent.getIntExtra("position",0);
+        id = intent.getIntExtra("taskID", 0);
+
 
         title.setText(tit);
         contents.setText(cnt);
@@ -46,6 +48,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 intent.putExtra("completedTitle", tit);
                 intent.putExtra("completedPosition", position);
+                intent.putExtra("completedID", id);
                 intent.putExtra("buttonType", 1);
                 setResult(RESULT_OK, intent);
                 finish();
@@ -59,6 +62,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 intent.putExtra("deleteTitle", tit);
                 intent.putExtra("deletePosition", position);
+                intent.putExtra("deleteID", id);
                 intent.putExtra("buttonType", 2);
                 setResult(RESULT_OK, intent);
                 finish();

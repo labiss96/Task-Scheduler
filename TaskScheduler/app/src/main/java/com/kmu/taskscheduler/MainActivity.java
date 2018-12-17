@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity
     ListAdapter adapter;
 
     String detail_title, detail_contents, detail_category, detail_finalDay;
-    int detail_dday;
+    int detail_dday, detail_id;
 
     private SQLiteDatabase init_database(){
         SQLiteDatabase db = null ;
@@ -126,6 +126,8 @@ public class MainActivity extends AppCompatActivity
                         detailIntent.putExtra("contents",detail_contents);
                         detailIntent.putExtra("category",detail_category);
                         detailIntent.putExtra("position", position); //리스트에 어떤 값인지를 구분하기 위해 position 값도 같이 넘겨줌.
+                        detailIntent.putExtra("taskID", detail_id);
+
 
                         startActivityForResult(detailIntent, 3001);
                     }
@@ -138,13 +140,16 @@ public class MainActivity extends AppCompatActivity
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
             {
 
-                int i = 0;
+                int task_id = 0;
                 String title = listView.getAdapter().getItem(position).toString();
-                Toast.makeText(getApplicationContext(), title, Toast.LENGTH_LONG).show();
-                //sqliteDB.execSQL(mydb.SQL_DELETE + " WHERE title="+"'"+title+"'");
-                // 그냥 테스트 코드---------------sqliteDB.execSQL("DELETE FROM mydb WHERE title = '" + title + "';");
-                // 길게눌렀을때 타이틀값을 얻어야 합니다.
-                sqliteDB.delete(mydb.TABLE_NAME,mydb.ID+"=?",new String[]{String.valueOf(i)});
+                Toast.makeText(getApplicationContext(), title+ "과제가 삭제되었습니다.", Toast.LENGTH_LONG).show();
+
+                Cursor cs = sqliteDB.rawQuery(DBHelper.SQL_SELECT,null);
+                if(cs.moveToPosition(position))
+                    task_id = cs.getInt(0);
+
+                sqliteDB.delete(mydb.TABLE_NAME, mydb.ID+"=?", new String[]{String.valueOf(task_id)});
+
                 tasks.remove(position);
                 ((BaseAdapter)adapter).notifyDataSetChanged();
                 return false;
@@ -160,11 +165,13 @@ public class MainActivity extends AppCompatActivity
     private void getValue(int k){
         Cursor cs = sqliteDB.rawQuery(DBHelper.SQL_SELECT,null);
         if(cs.moveToPosition(k)){
-            detail_category = taskChangeToString(cs.getInt(1));
-            detail_contents = cs.getString(4);
-            detail_title = cs.getString(5);
-            detail_finalDay = cs.getString(2);
-            detail_dday = cs.getInt(6);
+            detail_category = taskChangeToString(cs.getInt(2));
+            detail_contents = cs.getString(5);
+            detail_title = cs.getString(6);
+            detail_finalDay = cs.getString(3);
+            detail_dday = cs.getInt(7);
+            detail_id = cs.getInt(0);
+
             // get value of table (need index or keyvalue)
         }
     }
@@ -206,7 +213,8 @@ public class MainActivity extends AppCompatActivity
                     cs.moveToLast();
                     add(cs.getInt(0)+1,0,taskChange(category_value),fd,sdf.format(n),contents_value,title_value,year_value *month_value*30 +day_value);
                     if(cs.moveToLast())
-                        tasks.add(cs.getString(5));
+                        tasks.add(cs.getString(6));
+                        tasksId.add(cs.getInt(0));
                     ((BaseAdapter)adapter).notifyDataSetChanged();
 
                     Toast.makeText(getApplicationContext(), title_value + year_value +"년"+ month_value +"월"+ day_value + "일", Toast.LENGTH_LONG).show();
@@ -215,13 +223,15 @@ public class MainActivity extends AppCompatActivity
                 case 3001: { // DetailActivity에서 제거 및 과제완료 버튼
                     String deleteTitle = "";
                     String completeTitle = "";
-                    int deletePosition, completePosition, buttonType;
+                    int deletePosition, completePosition, buttonType, completedTask_id, deleteTask_id;
 
                     deleteTitle = data.getStringExtra("deleteTitle");
                     completeTitle = data.getStringExtra("completedTitle");
                     deletePosition = data.getIntExtra("deletePosition", 1);
                     completePosition = data.getIntExtra("completedPosition", 1);
                     buttonType = data.getIntExtra("buttonType", 0);
+                    completedTask_id = data.getIntExtra("completedID", 0);
+                    deleteTask_id = data.getIntExtra("deleteID", 0);
 
 
                     switch (buttonType){
@@ -230,7 +240,7 @@ public class MainActivity extends AppCompatActivity
                             ((BaseAdapter)adapter).notifyDataSetChanged();
                             Toast.makeText(getApplicationContext(), completeTitle, Toast.LENGTH_LONG).show();
                             //DB에서 넘버링 바꿔서 완료코드로 전환
-                            //updateNumber(completeTitle);
+                            updateNumber(completedTask_id);
                             break;
                         }
                         case 2: { //과제삭제
@@ -238,6 +248,7 @@ public class MainActivity extends AppCompatActivity
                             ((BaseAdapter) adapter).notifyDataSetChanged();
                             Toast.makeText(getApplicationContext(), deleteTitle, Toast.LENGTH_LONG).show();
                             //DB에서 제거하는 코드
+                            sqliteDB.delete(mydb.TABLE_NAME, mydb.ID+"=?", new String[]{String.valueOf(deleteTask_id)});
                             break;
                         }
                         default:
