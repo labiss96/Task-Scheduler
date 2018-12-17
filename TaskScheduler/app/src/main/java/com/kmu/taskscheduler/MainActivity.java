@@ -144,9 +144,8 @@ public class MainActivity extends AppCompatActivity
         sqliteDB.execSQL(mydb.SQL_UPDATE_NUM+title);
     }
     private void getValue(int k){
-        SQLiteDatabase sqdb = mydb.getReadableDatabase();
-        Cursor cs = sqdb.rawQuery(DBHelper.SQL_SELECT,null);
-        if(cs.move(k)){
+        Cursor cs = sqliteDB.rawQuery(DBHelper.SQL_SELECT,null);
+        if(cs.moveToPosition(k)){
             detail_category = taskChangeToString(cs.getInt(1));
             detail_contents = cs.getString(4);
             detail_title = cs.getString(5);
