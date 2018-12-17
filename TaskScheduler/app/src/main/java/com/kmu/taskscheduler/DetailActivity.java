@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class DetailActivity extends AppCompatActivity {
 
     String tit, cnt, cat, finDay;
@@ -39,11 +42,23 @@ public class DetailActivity extends AppCompatActivity {
         finDay = intent.getStringExtra("finalDay");
         dday = intent.getIntExtra("dday", dday);
 
+        String[] finalDayYMD = finDay.split("/");
+        int year = Integer.valueOf(finalDayYMD[0]);
+        int mon = Integer.valueOf(finalDayYMD[1]);
+        int day = Integer.valueOf(finalDayYMD[2]);
+
+        Calendar c = Calendar.getInstance();
+        Calendar cc = Calendar.getInstance();
+        c.set(year,mon,day);
+        int fd = c.get(Calendar.DATE);
+        int d = fd - cc.get(Calendar.DATE);
+
+
         title.setText(tit);
         contents.setText(cnt);
         category.setText(cat);
         finalDay.setText(finDay);
-
+        d_day.setText("D - "+String.valueOf(d));
 
         completedButton.setOnClickListener(new View.OnClickListener() {
             @Override
