@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 public class DetailActivity extends AppCompatActivity {
 
-    String tit, cnt, cat;
-    int position, id;
+    String tit, cnt, cat, finDay;
+    int position, id, dday;
 
 
 
@@ -23,6 +23,8 @@ public class DetailActivity extends AppCompatActivity {
         TextView title = (TextView) findViewById(R.id.title);
         TextView contents = (TextView) findViewById(R.id.contents);
         TextView category = (TextView) findViewById(R.id.category);
+        TextView finalDay = (TextView) findViewById(R.id.finalDay);
+        TextView d_day = (TextView) findViewById(R.id.D_Day);
 
         Button deleteButton = (Button) findViewById(R.id.delete);
         Button completedButton = (Button) findViewById(R.id.complete);
@@ -34,11 +36,13 @@ public class DetailActivity extends AppCompatActivity {
         cat = intent.getStringExtra("category");
         position = intent.getIntExtra("position",0);
         id = intent.getIntExtra("taskID", 0);
-
+        finDay = intent.getStringExtra("finalDay");
+        dday = intent.getIntExtra("dday", dday);
 
         title.setText(tit);
         contents.setText(cnt);
         category.setText(cat);
+        finalDay.setText(finDay);
 
 
         completedButton.setOnClickListener(new View.OnClickListener() {

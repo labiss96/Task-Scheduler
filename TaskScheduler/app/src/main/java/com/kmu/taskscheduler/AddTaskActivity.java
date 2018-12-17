@@ -47,7 +47,7 @@ public class AddTaskActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)  {
-                Toast.makeText(AddTaskActivity.this, ""+spinner.getItemAtPosition(position), Toast.LENGTH_LONG).show();
+                //Toast.makeText(AddTaskActivity.this, ""+spinner.getItemAtPosition(position), Toast.LENGTH_LONG).show();
                 category = spinner.getItemAtPosition(position).toString();
             }
             @Override

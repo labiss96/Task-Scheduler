@@ -128,7 +128,8 @@ public class MainActivity extends AppCompatActivity
                         detailIntent.putExtra("category",detail_category);
                         detailIntent.putExtra("position", position); //리스트에 어떤 값인지를 구분하기 위해 position 값도 같이 넘겨줌.
                         detailIntent.putExtra("taskID", detail_id);
-
+                        detailIntent.putExtra("finalDay", detail_finalDay);
+                        detailIntent.putExtra("dday",detail_dday);
 
                         startActivityForResult(detailIntent, 3001);
                     }
@@ -377,7 +378,7 @@ public class MainActivity extends AppCompatActivity
 
             }
             completedIntent.putExtra("completedTasks",arr);
-            Toast.makeText(getApplicationContext(), "" +i , Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "" +i , Toast.LENGTH_LONG).show();
 
             startActivity(completedIntent);
         } else if (id == R.id.average) {

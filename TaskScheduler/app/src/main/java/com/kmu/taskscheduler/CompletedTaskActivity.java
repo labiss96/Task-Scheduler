@@ -30,9 +30,12 @@ public class CompletedTaskActivity extends AppCompatActivity {
 
         //Toast.makeText(getApplicationContext(), arr[0] , Toast.LENGTH_LONG).show();
 
-        for(int i = 0; i<arr.length; ++i) {
+        int i = 0;
+        while(arr[i] != null){
             tasks.add(arr[i]);
+            ++i;
         }
+
 
         ((BaseAdapter)adapter).notifyDataSetChanged();
 

@@ -51,11 +51,12 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/finalDay"
                 android:layout_width="280dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="TextView" />
+                android:gravity="center"
+                android:textColor="#000000"
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/D_Day"
