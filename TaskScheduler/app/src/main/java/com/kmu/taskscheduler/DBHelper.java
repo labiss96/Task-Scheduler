@@ -63,7 +63,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String SQL_INSERT_2 = "INSERT OR REPLACE INTO " + TABLE_NAME_2 + " "+ "("+
             NUM_2 +", "+AVERAGE+") VALUES ";
-
+    public static final String SQL_UPDATA_2 = "UPDATE "+TABLE_NAME_2+" SET ";
     public DBHelper(Context context){
         super(context,DBFILE,null,DBVERSION);
     }
