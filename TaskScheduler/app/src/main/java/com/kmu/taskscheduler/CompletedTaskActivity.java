@@ -28,11 +28,11 @@ public class CompletedTaskActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String[] arr = intent.getStringArrayExtra("completedTasks");
 
-//        Toast.makeText(getApplicationContext(), arr[0] , Toast.LENGTH_LONG).show();
-//
-//        for(int i = 0; i<arr.length; ++i) {
-//            tasks.add(arr[i]);
-//        }
+        //Toast.makeText(getApplicationContext(), arr[0] , Toast.LENGTH_LONG).show();
+
+        for(int i = 0; i<arr.length; ++i) {
+            tasks.add(arr[i]);
+        }
 
         ((BaseAdapter)adapter).notifyDataSetChanged();
 

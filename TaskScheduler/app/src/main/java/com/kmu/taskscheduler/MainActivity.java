@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity
 
         }
         while(cs2.moveToNext()) {
-            String no = cs2.getString(5);
+            String no = cs2.getString(4);
             int i = cs2.getInt(0);
             tasksId.add(i);
             tasks.add(no);
@@ -166,8 +166,8 @@ public class MainActivity extends AppCompatActivity
         Cursor cs = sqliteDB.rawQuery(DBHelper.SQL_SELECT,null);
         if(cs.moveToPosition(k)){
             detail_category = taskChangeToString(cs.getInt(2));
-            detail_contents = cs.getString(5);
-            detail_title = cs.getString(6);
+            detail_contents = cs.getString(6);
+            detail_title = cs.getString(4);
             detail_finalDay = cs.getString(3);
             detail_dday = cs.getInt(7);
             detail_id = cs.getInt(0);
@@ -175,16 +175,16 @@ public class MainActivity extends AppCompatActivity
             // get value of table (need index or keyvalue)
         }
     }
-    private void add(int id,int n,int task , String fd,String sd,String cont,String title,int dday){
+    private void add(int id,int n,int task, String fd,String sd,String cont,String title,int dday){
         SQLiteDatabase sqdb = mydb.getWritableDatabase();
         sqdb.execSQL(DBHelper.SQL_DELETE);
 
         String sqlInsert = DBHelper.SQL_INSERT + " ("+id+", "+n+", "+
                 task + ", " + "'" +
                 fd +"'," + "'"+
-                sd + "', " +"'"+
-                cont + "'," + "'"+
-                title + "', "+ dday +")"; //1,
+                title + "', " +"'"+
+                sd + "'," + "'"+
+                cont + "', "+ dday +")"; //1,
         sqdb.execSQL(sqlInsert);
         sqliteDB.execSQL(sqlInsert);
     }
@@ -211,10 +211,15 @@ public class MainActivity extends AppCompatActivity
                     Date n = new Date();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
                     cs.moveToLast();
-                    add(cs.getInt(0)+1,0,taskChange(category_value),fd,sdf.format(n),contents_value,title_value,year_value *month_value*30 +day_value);
+                    Calendar now = Calendar.getInstance();
+                    int date = now.get(Calendar.DATE);
+                    add(cs.getInt(0)+1,0,taskChange(category_value),fd,sdf.format(n),contents_value,title_value,date);
+
+                    cs = sqliteDB.rawQuery(DBHelper.SQL_SELECT, null);
+
                     if(cs.moveToLast())
-                        tasks.add(cs.getString(6));
-                        tasksId.add(cs.getInt(0));
+                        tasks.add(cs.getString(4));
+                        //tasksId.add(cs.getInt(0));
                     ((BaseAdapter)adapter).notifyDataSetChanged();
 
                     Toast.makeText(getApplicationContext(), title_value + year_value +"년"+ month_value +"월"+ day_value + "일", Toast.LENGTH_LONG).show();
@@ -365,7 +370,7 @@ public class MainActivity extends AppCompatActivity
                 while(cs.moveToNext()){
                     int c2 = cs.getInt(1);
                     if(c2 == 1){
-                        arr[i] = cs.getString(5);
+                        arr[i] = cs.getString(4);
                         i++;
                     }
 
@@ -373,7 +378,7 @@ public class MainActivity extends AppCompatActivity
             completedIntent.putExtra("completedTasks",arr);
             Toast.makeText(getApplicationContext(), "" +i , Toast.LENGTH_LONG).show();
 
-            //startActivity(completedIntent);
+            startActivity(completedIntent);
         } else if (id == R.id.average) {
 
         } else if (id == R.id.info) {
