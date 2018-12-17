@@ -55,14 +55,14 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String CUSTOM = "customDay";
 
     public static final String SQL_CREATE_TB2 = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_2 +" " + "(" +
-            NUM_2 + " INTEGER NOT NULL" + ", " + USERSELECT + "INTEGER , " +
-            AVERAGE + "INTEGER ,"+CUSTOM + "INTEGER )";
+            NUM_2 + " INTEGER NOT NULL" + ", " +
+            AVERAGE + " INTEGER"+")";
     public static final String SQL_SELECT_2 = "SELECT * FROM " + TABLE_NAME_2;
 
     public static final String SQL_DELETE_2 = "DELETE FROM " + TABLE_NAME_2;
 
     public static final String SQL_INSERT_2 = "INSERT OR REPLACE INTO " + TABLE_NAME_2 + " "+ "("+
-            NUM_2 +", " +USERSELECT+", "+AVERAGE+", "+CUSTOM+") VALUES ";
+            NUM_2 +", "+AVERAGE+") VALUES ";
 
     public DBHelper(Context context){
         super(context,DBFILE,null,DBVERSION);

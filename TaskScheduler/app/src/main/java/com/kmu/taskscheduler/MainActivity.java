@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity
         Cursor cs2 = sqliteDB.rawQuery(DBHelper.SQL_SELECT,null);
         if(0==cs2.getCount()){
             add(0,0,1,"","","","",0);
+
         }
         while(cs2.moveToNext()) {
             String no = cs2.getString(5);
@@ -100,7 +101,15 @@ public class MainActivity extends AppCompatActivity
             tasksId.add(i);
             tasks.add(no);
         }
-
+        Cursor cs = sqliteDB.rawQuery(DBHelper.SQL_SELECT_2,null);
+        if(cs.getCount()==0){
+            int j = 0;
+            for(int i = 0 ; i<6;i++){
+                if(i == 5)
+                    j = 4;
+                addt2(i+1,3+j);
+            }
+        }
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, tasks);
         final ListView listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapter);
@@ -172,7 +181,10 @@ public class MainActivity extends AppCompatActivity
         sqdb.execSQL(sqlInsert);
         sqliteDB.execSQL(sqlInsert);
     }
-
+    private void addt2(int id,int aver){
+        String sqlInsert = mydb.SQL_INSERT_2 + " ("+id+", "+aver+")";
+        sqliteDB.execSQL(sqlInsert);
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK){
@@ -187,7 +199,7 @@ public class MainActivity extends AppCompatActivity
                     month_value = data.getIntExtra("month", 1);
                     day_value = data.getIntExtra("day", 1);
 
-                    String fd = String.valueOf(year_value) + String.valueOf(month_value)+String.valueOf(day_value);
+                    String fd = String.valueOf(year_value) +"/"+ String.valueOf(month_value)+"/"+String.valueOf(day_value);
 
                     Date n = new Date();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
