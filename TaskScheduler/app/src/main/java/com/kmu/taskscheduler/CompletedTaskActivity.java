@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -27,9 +28,11 @@ public class CompletedTaskActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String[] arr = intent.getStringArrayExtra("completedTasks");
 
-        for(int i = 0; i<arr.length; ++i) {
-            tasks.add(arr[i]);
-        }
+//        Toast.makeText(getApplicationContext(), arr[0] , Toast.LENGTH_LONG).show();
+//
+//        for(int i = 0; i<arr.length; ++i) {
+//            tasks.add(arr[i]);
+//        }
 
         ((BaseAdapter)adapter).notifyDataSetChanged();
 

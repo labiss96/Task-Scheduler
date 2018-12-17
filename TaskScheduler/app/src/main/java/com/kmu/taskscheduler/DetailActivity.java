@@ -27,7 +27,6 @@ public class DetailActivity extends AppCompatActivity {
         Button deleteButton = (Button) findViewById(R.id.delete);
         Button completedButton = (Button) findViewById(R.id.complete);
 
-
         //title textView에 과제 string 값 받아서 출력.
         Intent intent = getIntent();
         tit = intent.getStringExtra("title");
@@ -40,18 +39,6 @@ public class DetailActivity extends AppCompatActivity {
         category.setText(cat);
 
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DetailActivity.this, MainActivity.class);
-
-                intent.putExtra("deleteTitle", tit);
-                intent.putExtra("deletePosition", position);
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        });
-
         completedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,11 +46,25 @@ public class DetailActivity extends AppCompatActivity {
 
                 intent.putExtra("completedTitle", tit);
                 intent.putExtra("completedPosition", position);
-
+                intent.putExtra("buttonType", 1);
                 setResult(RESULT_OK, intent);
                 finish();
             }
         });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DetailActivity.this, MainActivity.class);
+
+                intent.putExtra("deleteTitle", tit);
+                intent.putExtra("deletePosition", position);
+                intent.putExtra("buttonType", 2);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
+
 
     }
 

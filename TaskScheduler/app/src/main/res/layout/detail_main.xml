@@ -78,18 +78,18 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/complete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="과제완료" />
+
+            <Button
                 android:id="@+id/delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="삭제" />
-
-            <Button
-                android:id="@+id/complete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="과제 완료" />
         </LinearLayout>
 
     </LinearLayout>

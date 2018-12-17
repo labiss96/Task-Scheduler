@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity
             {
 
 
-                tasks[position]
                 String title = listView.getAdapter().getItem(position).toString();
                 Toast.makeText(getApplicationContext(), title, Toast.LENGTH_LONG).show();
                 //sqliteDB.execSQL(mydb.SQL_DELETE + " WHERE title="+"'"+title+"'");
@@ -143,7 +142,7 @@ public class MainActivity extends AppCompatActivity
     } //end onCreate
 
     private void updateNumber(String title){
-        sqliteDB.execSQL(mydb.SQL_UPDATE_NUM+title);
+        sqliteDB.execSQL(mydb.SQL_UPDATE_NUM+"'"+title+"'");
     }
     private void getValue(int k){
         Cursor cs = sqliteDB.rawQuery(DBHelper.SQL_SELECT,null);
@@ -198,28 +197,34 @@ public class MainActivity extends AppCompatActivity
                 }
                 case 3001: { // DetailActivity에서 제거 및 과제완료 버튼
                     String deleteTitle = "";
-                    String completedTitle = "";
-                    int deletePosition, completedPosition;
+                    String completeTitle = "";
+                    int deletePosition, completePosition, buttonType;
 
                     deleteTitle = data.getStringExtra("deleteTitle");
-                    completedTitle = data.getStringExtra("completedTitle");
+                    completeTitle = data.getStringExtra("completedTitle");
                     deletePosition = data.getIntExtra("deletePosition", 1);
-                    completedPosition = data.getIntExtra("completedPosition", 1);
+                    completePosition = data.getIntExtra("completedPosition", 1);
+                    buttonType = data.getIntExtra("buttonType", 0);
 
 
-                    Toast.makeText(getApplicationContext(), deleteTitle, Toast.LENGTH_LONG).show();
-                    Toast.makeText(getApplicationContext(), completedTitle, Toast.LENGTH_LONG).show();
-
-                    if(deleteTitle != "") {
-                        tasks.remove(deletePosition);
-                        ((BaseAdapter)adapter).notifyDataSetChanged();
-                        //DB에서 제거하는 코드
-                    }
-                    else if(completedTitle != "")   {
-                        tasks.remove(completedPosition);
-                        ((BaseAdapter)adapter).notifyDataSetChanged();
-                        updateNumber(completedTitle);
-                        //DB에서 넘버링 바꿔서 완료코드로 전환
+                    switch (buttonType){
+                        case 1: { //과제완료
+                            tasks.remove(completePosition);
+                            ((BaseAdapter)adapter).notifyDataSetChanged();
+                            Toast.makeText(getApplicationContext(), completeTitle, Toast.LENGTH_LONG).show();
+                            //DB에서 넘버링 바꿔서 완료코드로 전환
+                            updateNumber(completeTitle);
+                            break;
+                        }
+                        case 2: { //과제삭제
+                            tasks.remove(deletePosition);
+                            ((BaseAdapter) adapter).notifyDataSetChanged();
+                            Toast.makeText(getApplicationContext(), deleteTitle, Toast.LENGTH_LONG).show();
+                            //DB에서 제거하는 코드
+                            break;
+                        }
+                        default:
+                            break;
                     }
                 }
                 default:
@@ -328,23 +333,19 @@ public class MainActivity extends AppCompatActivity
             Intent completedIntent = new Intent(this, CompletedTaskActivity.class);
             String[] arr = new String[100];
             int i = 0 ;
-            if(cs.moveToFirst()){
-                int c = cs.getInt(0);
-                if(c == 1){
-                    arr[i] = cs.getString(5);
-                    i++;
-                }
+
                 while(cs.moveToNext()){
                     int c2 = cs.getInt(0);
                     if(c2 == 1){
                         arr[i] = cs.getString(5);
                         i++;
                     }
-                }
+
             }
             completedIntent.putExtra("completedTasks",arr);
+            Toast.makeText(getApplicationContext(), "" +i , Toast.LENGTH_LONG).show();
 
-            startActivity(completedIntent);
+            //startActivity(completedIntent);
         } else if (id == R.id.average) {
 
         } else if (id == R.id.info) {
