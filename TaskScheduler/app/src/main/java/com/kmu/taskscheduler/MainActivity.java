@@ -92,11 +92,9 @@ public class MainActivity extends AppCompatActivity
         SQLiteDatabase sqdb = mydb.getReadableDatabase();
         Cursor cs = sqdb.rawQuery(DBHelper.SQL_SELECT,null);
         Cursor cs2 = sqliteDB.rawQuery(DBHelper.SQL_SELECT,null);
-        //listView에 들어가는 과제들을 arraylist로 담았음.
 
 //        tasks.add("Quiz2");
-//        tasks.add("컴구 HW6");
-//        tasks.add("수학과문명 독후감");
+
 
         if(cs.moveToFirst()) {
             String no = cs.getString(5);
@@ -108,7 +106,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, tasks);
-        ListView listView = (ListView) findViewById(R.id.listView);
+        final ListView listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapter);
 
         //과제 클릭 시 데이터베이스에 저장된 해당 과제의 값들을 detailActivity로 보냄
@@ -116,14 +114,15 @@ public class MainActivity extends AppCompatActivity
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                        Intent detailIntent = new Intent(MainActivity.this, DetailActivity.class);
 
                         getValue(position);
-                        intent.putExtra("title",detail_title);
-                        intent.putExtra("contents",detail_contents);
-                        intent.putExtra("category",detail_category);
+                        detailIntent.putExtra("title",detail_title);
+                        detailIntent.putExtra("contents",detail_contents);
+                        detailIntent.putExtra("category",detail_category);
+                        detailIntent.putExtra("position", position); //리스트에 어떤 값인지를 구분하기 위해 position 값도 같이 넘겨줌.
 
-                        startActivity(intent);
+                        startActivityForResult(detailIntent, 3001);
                     }
                 }
         );
@@ -133,16 +132,21 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
             {
-                tasks.remove(position);
-                // sqliteDB.execSQL(mydb.SQL_DELETE + " WHERE title="+title);
+
+                String title = listView.getAdapter().getItem(position).toString();
+//                Toast.makeText(getApplicationContext(), title, Toast.LENGTH_LONG).show();
+                //sqliteDB.execSQL(mydb.SQL_DELETE + " WHERE title="+title);
+                // 그냥 테스트 코드---------------sqliteDB.execSQL("DELETE FROM mydb WHERE title = '" + title + "';");
                 // 길게눌렀을때 타이틀값을 얻어야 합니다.
+                tasks.remove(position);
                 ((BaseAdapter)adapter).notifyDataSetChanged();
                 return false;
             }
         });
 
 
-    }
+    } //end onCreate
+
     private void updateNumber(String title){
         sqliteDB.execSQL(mydb.SQL_UPDATE_NUM+title);
     }
@@ -178,7 +182,7 @@ public class MainActivity extends AppCompatActivity
             SQLiteDatabase sqdb = mydb.getReadableDatabase();
             Cursor cs = sqdb.rawQuery(DBHelper.SQL_SELECT,null);
             switch (requestCode){
-                case 3000: {
+                case 3000: { // AddTaskActivity
                     title_value = data.getStringExtra("title");
                     contents_value = data.getStringExtra("contents");
                     category_value = data.getStringExtra("category");
@@ -197,6 +201,31 @@ public class MainActivity extends AppCompatActivity
 
                     Toast.makeText(getApplicationContext(), title_value + year_value +"년"+ month_value +"월"+ day_value + "일", Toast.LENGTH_LONG).show();
                     break;
+                }
+                case 3001: { // DetailActivity에서 제거 및 과제완료 버튼
+                    String deleteTitle = "";
+                    String completedTitle = "";
+                    int deletePosition, completedPosition;
+
+                    deleteTitle = data.getStringExtra("deleteTitle");
+                    completedTitle = data.getStringExtra("completedTitle");
+                    deletePosition = data.getIntExtra("deletePosition", 1);
+                    completedPosition = data.getIntExtra("completedPosition", 1);
+
+
+                    Toast.makeText(getApplicationContext(), deleteTitle, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), completedTitle, Toast.LENGTH_LONG).show();
+
+                    if(deleteTitle != "") {
+                        tasks.remove(deletePosition);
+                        ((BaseAdapter)adapter).notifyDataSetChanged();
+                        //DB에서 제거하는 코드
+                    }
+                    else if(completedTitle != "")   {
+                        tasks.remove(completedPosition);
+                        ((BaseAdapter)adapter).notifyDataSetChanged();
+                        //DB에서 넘버링 바꿔서 완료코드로 전환
+                    }
                 }
                 default:
                     break;
