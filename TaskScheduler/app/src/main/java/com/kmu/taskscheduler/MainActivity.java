@@ -428,10 +428,10 @@ public class MainActivity extends AppCompatActivity
             //Toast.makeText(getApplicationContext(), "" +i , Toast.LENGTH_LONG).show();
 
             startActivity(completedIntent);
-        } else if (id == R.id.average) {
 
         } else if (id == R.id.info) {
-
+            Intent appInfoIntent = new Intent(this, appInfo.class);
+            startActivity(appInfoIntent);
         }
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
